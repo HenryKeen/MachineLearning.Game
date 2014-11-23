@@ -42,11 +42,20 @@ Decision from the latest Experience recorded,
 - update the Strategy value as 
 (1 - alpha) * V(strat) + alpha * reward from experience 
 *)
-
     let alpha = 0.2 // learning rate
     
     let learn (brain:Brain) (exp:Experience) =
-        brain
+        let strategy = { State = exp.State; Action = exp.Action; }
+
+        let existingStrategy = brain.TryFind(strategy)
+        
+        let nextVal = match existingStrategy with
+            | None -> 0.
+            | Some(t) -> existingStrategy.Value 
+
+        let strategyValue = (1. - alpha) * nextVal + alpha * exp.Reward
+        brain.Add(strategy, strategyValue)
+
 
 (*
 TODO: implement decide, so that the creature
