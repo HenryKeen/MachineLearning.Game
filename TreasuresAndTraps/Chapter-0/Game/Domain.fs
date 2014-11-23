@@ -76,4 +76,10 @@ the gain should be 100, if it's a Trap, -100,
 otherwise, 0.
 *)
     let computeGain (board:Board) (creature:Creature) =
-        -500
+        let cell = board.[creature.Position.Top,creature.Position.Left]
+        match cell with
+        | None -> 0
+        | Some(x) ->
+            match x with
+            | Treasure -> 100
+            | Trap -> -100
