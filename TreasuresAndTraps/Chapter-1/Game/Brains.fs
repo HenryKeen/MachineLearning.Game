@@ -67,9 +67,16 @@ make a random move,
 correspond to the current state, pick the strategy 
 that has the highest value.
 *)
+    let chooseAction (existingState:Collections.Generic.KeyValuePair<Strategy,double>) =
+        if existingState.Value > 0. 
+        then existingState.Key.Action
+        else if existingState.Value < 0.
+        then randomDecide()
+        else randomDecide()
+
     let decide (brain:Brain) (state:State) =
         let existingState = brain
                             |> Seq.tryFind(fun x -> x.Key.State = state)
         match existingState with
         | None -> randomDecide()
-        | Some(t) -> if existingState.Value.Value > 0. then existingState.Value.Key.Action else randomDecide()
+        | Some(t) -> chooseAction(existingState.Value)
