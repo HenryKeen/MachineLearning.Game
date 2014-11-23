@@ -67,6 +67,9 @@ make a random move,
 correspond to the current state, pick the strategy 
 that has the highest value.
 *)
-
     let decide (brain:Brain) (state:State) =
-        randomDecide ()
+        let existingState = brain
+                            |> Seq.tryFind(fun x -> x.Key.State = state)
+        match existingState with
+        | None -> randomDecide()
+        | Some(t) -> if existingState.Value.Value > 0. then existingState.Value.Key.Action else randomDecide()
